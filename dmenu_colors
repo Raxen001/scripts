@@ -1,0 +1,25 @@
+#!/bin/sh
+declare -A colors
+colors+=(
+["black"]="#1d2021"
+["gray"]="#282828"
+["red"]="#CC241D"
+["light-red"]="#fb4934"
+["green"]="#98971A"
+["light-green"]="#B8BB26"
+["yellow"]="#D79921"
+["light-yellow"]="#FABD2F"
+["blue"]="#458588"
+["light-blue"]="#83A598"
+["magenta"]="#B16286"
+["light-magenta"]="#D3869B"
+["cyan"]="#689D6A"
+["light-cyan"]="#8EC07C"
+["white"]="#928374"
+["light-white"]="#EBDBB2"
+)
+key=$(printf "%s\n" ${!colors[*]} | sort  | dmenu -i -l 10 -p ": ")
+if [ -n "$key" ]
+then
+  echo ${colors["$key"]} | tr -d '\n' | xclip -selection clipboard
+fi

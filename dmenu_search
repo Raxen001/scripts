@@ -1,0 +1,120 @@
+#!/bin/sh
+
+# Released under MIT License
+
+# Copyright (C) 2021 Rizqi Nur Assyaufi <bandithijo@gmail.com>
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+# https://github.com/bandithijo/dmenu-websearch
+
+MENU="dmenu"
+browser="$BROWSER"
+
+OPTIONS='''
+[
+[ "aw",       "https://wiki.archlinux.org/index.php?search=" ],
+[ "aur",      "https://aur.archlinux.org/packages/?K="       ],
+[ "yt",       "https://www.youtube.com/results?search_query="],
+[ "wiki",     "https://en.wikipedia.org/w/index.php?search=" ],
+[ "man",      "https://man.archlinux.org/search?q="          ],
+[ "ddg",      "https://duckduckgo.com/?q="                   ],
+[ "git",      "https://github.com/search?q="                 ],
+[ "manga",    "https://www.mangasaki.com/search/node/"       ],
+[ "anime",    "https://animixplay.to/?q="                    ],
+[ "google",   "https://www.google.com/search?q="             ],
+[ "book",     "https://libgen.is/search.php?req="            ]
+
+]
+'''
+
+xprop -root | grep '^_NET_ACTIVE_WINDOW' && {
+	winid=$(xprop -root _NET_ACTIVE_WINDOW | sed 's/.*[[:space:]]//')
+	class=$(xprop -id "$winid" WM_CLASS | awk -F'\"' '{ print $(NF - 1) }')
+	case "$class" in
+		firefox) nbrowser='firefox' ;;
+		#Firefox) shortcut='ctrl+l' ;; # alternative method, uses xdotool
+		LibreWolf) nbrowser='librewolf' ;;
+		Brave-browser) nbrowser='brave' ;;
+		IceCat) nbrowser='icecat' ;;
+		Chromium) nbrowser='chromium' ;;
+		Chrome) nbrowser='chrome' ;;
+		Opera) nbrowser='opera' ;;
+		Vivaldi) nbrowser='vivaldi' ;; # not tested
+		Brave) nbrowser='brave' ;; # not tested
+		Conkeror) nbrowser='conkeror' ;; # not tested
+		Palemoon) nbrowser='palemoon' ;; # not tested
+		Iceweasel) nbrowser='iceweasel' ;; # not tested
+		qutebrowser) nbrowser='qutebrowser' ;;
+		Midori) nbrowser='midori' ;; # not that good
+		Luakit) nbrowser='luakit' ;; # uses the last window instance
+		Uzbl|Vimb) shortcut='o' ;;
+		Links) shortcut='g' ;;
+		ELinks) nbrowser='elinks' ;;
+		Netsurf*|Epiphany|Dillo|Konqueror|Arora) shortcut='ctrl+l' ;;
+		Surf) nbrowser='surf' ; uricur=$(xprop -id "$winid" _SURF_URI |\
+				awk -F'\"' '{ print $( NF - 1 ) }') ;;
+		*) pid=$(xprop -id "$winid" _NET_WM_PID | awk '{ print $3 }')
+			while pgrep -oP "$pid" >/dev/null
+			do
+				pid=$(pgrep -oP "$pid")
+			done
+			pname=$(awk '/^Name\:/{ print $NF }' /proc/"$pid"/status) ||
+				winid="" ;;
+	esac
+	[ -n "$pname" ] && case "$pname" in
+		w3m) shortcut="U" ;;
+		lynx|elinks|links) shortcut="g" ;;
+		elinks) shortcut="o" ;;
+		*) winid="" ;;
+	esac
+}
+
+
+
+OBJ_LENGTH=$(echo $OPTIONS | jq length)
+OBJ_MENU=$(echo $OPTIONS | jq -r ".[][0]" | $MENU -i -p " WebSearch")
+OBJ_SELECTED=$(echo $OBJ_MENU | cut -d' ' -f1)
+OBJ_KEYWORDS=$(echo $OBJ_MENU | cut -d' ' -f2- | tr " " "+")
+
+for i in $(seq 0 $((OBJ_LENGTH - 1))); do
+    if [ "$OBJ_SELECTED" = "$(echo $OPTIONS | jq -r --arg i $i '.[($i|tonumber)][0]')" ]; then
+        URLQUERY=$(echo $OPTIONS | jq -r --arg i $i '.[($i|tonumber)][1]')
+        KEYWORDS=$(echo $OBJ_KEYWORDS)
+
+	if [ "$nbrowser" = surf ]
+	then
+		xprop -id "$winid" -f _SURF_GO 8s -set _SURF_GO "${URLQUERY}${KEYWORDS}"
+	elif [ -n "$winid" ] && [ -z "$nbrowser" ]
+	then
+		#change layout to us cuz xdotool spasms with non-latin layouts
+		layout=$(setxkbmap -query | awk '/^layout:/{ print $2 }')
+		setxkbmap -layout us
+		xdotool key --clearmodifiers "$shortcut"\
+			type --clearmodifiers --delay 2 "${URLQUERY}${KEYWORDS}"
+		xdotool key --clearmodifiers Return
+		setxkbmap -layout "$layout"
+	elif [ -n "$nbrowser" ]
+	then
+        $nbrowser "${URLQUERY}${KEYWORDS}" 2> /dev/null
+	else $browser "${URLQUERY}${KEYWORDS}"
+	fi
+
+
+    fi
+done

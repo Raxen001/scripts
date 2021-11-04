@@ -1,0 +1,48 @@
+#!/bin/bash
+declare -A dotfiles
+#[""]=""
+dotfiles+=(
+["alacritty"]="$HOME/.config/alacritty/alacritty.yml"
+["newsboat"]="$HOME/.config/newsboat/config"
+["rss-url"]="$HOME/.config/newsboat/urls"
+["mpv"]="$HOME/.config/mpv/mpv.conf"
+["mpv-input"]="$HOME/.config/mpv/input.conf"
+["nvim"]="$HOME/.config/nvim/configs.vim"
+["norc"]="$HOME/.config/nvim/norc.vim"
+["dunst"]="$HOME/.config/dunst/dunstrc"
+["elinks"]="$HOME/.config/elinks/elinks.conf"
+["zathura"]="$HOME/.config/zathura/zathurarc"
+["amfora"]="$HOME/.config/amfora/config.toml"
+["nnn"]="$HOME/.config/nnn/"
+["startup"]="$HOME/Code/HTML-CSS/Custom_startup/startup.html"
+["raxengamer001.github.io"]="$HOME/Code/HTML-CSS/raxengamer001.github.io/"
+["to-watch"]="$HOME/Documents/personal_notes/board/TO-WATCH.md"
+["ytfzf"]="$HOME/.config/ytfzf/subscriptions"
+["sxiv"]="$HOME/.config/sxiv/exec/"
+["picom"]="$HOME/.config/picom.conf"
+["xinitrc"]="$HOME/.local/configs/dotfiles/xinitrc"
+["xresources"]="$HOME/.local/configs/dotfiles/Xresources"
+["bookmarks"]="$HOME/.local/configs/dotfiles/bookmarks"
+["dwm"]="$HOME/.local/configs/sourcepkgs/dwm-6.2/config.def.h"
+["dmenu"]="$HOME/.local/configs/sourcepkgs/dmenu-5.0/config.def.h"
+["slstatus"]="$HOME/.local/configs/sourcepkgs/slstatus/config.def.h"
+["nnn"]="$HOME/.local/configs/sourcepkgs/nnn/nnn"
+["zsh"]="$HOME/.local/configs/dotfiles/zsh/.zshrc"
+["zshenv"]="$HOME/.local/configs/dotfiles/zsh/.zshenv"
+)
+#echo ${dotfiles[@]}   ### get all values
+#echo ${dotfiles[*]}   ### get all values
+#echo ${!dotfiles[*]}  ### get all keys
+
+key=$(printf "%s\n" ${!dotfiles[*]} | sort  | dmenu -i -l 10 -p "dotfiles:  ")
+if [ -n "$key" ]
+then
+    file=${dotfiles["$key"]}
+fi
+
+if [ -n "$file" ] 
+then
+   $EDITOR "$file"
+else
+    exit
+fi
