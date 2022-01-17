@@ -17,5 +17,5 @@ dunstify -a "changebrightness" \
     -i /usr/share/icons/ePapirus/64x64/apps/brightness-systray.svg -r "$msgId" \
     -h int:value:"$brightness" "Brightness"
     #-h int:value:"$brightness" "Brightness : ${brightness}%"
-canberra-gtk-play -i message -d "changeVolume"
+#canberra-gtk-play -i message -d "changeVolume"
 

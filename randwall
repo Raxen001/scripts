@@ -1,0 +1,11 @@
+#!/bin/sh
+PATH=/usr/local/bin:/usr/bin 
+DISPLAY=:0 
+DESKTOP_SESSION=dwm 
+DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus" 
+SCREEN="0"
+MONITOR="1"
+#while true; do
+nitrogen --set-zoom-fill --random /home/raxen/Pictures/Wallpaper --save
+#    sleep 60
+#done

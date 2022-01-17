@@ -1,5 +1,5 @@
-#Startu picom composter
-picom --experimental-backends --config ~/.config/picom.conf &
+#Startup picom composter
+picom --experimental-backends --config ~/.config/picom.conf -b &
 
 #start up dunst notification
 dunst &
