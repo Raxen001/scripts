@@ -34,7 +34,7 @@ dotfiles+=(
 #echo ${dotfiles[*]}   ### get all values
 #echo ${!dotfiles[*]}  ### get all keys
 
-key=$(printf "%s\n" ${!dotfiles[*]} | sort  | dmenu -i -l 10 -p "dotfiles:  ")
+key=$(printf "%s\n" ${!dotfiles[*]} | sort  | dmenu -i -l 5 -p "dotfiles:  ")
 if [ -n "$key" ]
 then
     file=${dotfiles["$key"]}

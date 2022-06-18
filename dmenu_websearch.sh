@@ -90,7 +90,7 @@ cat "$bookmarks" >> "$tmpfile"
 sed -i -E '/^(#|$)/d' "$tmpfile"
 echo $tmpfile
 #choice=$(dmenu -l 10 -i -p "Go:" -w "$winid" < "$tmpfile"| awk '{print $(NF)}') || exit 1
-choice=$(dmenu -sb "#458588" -l 10 -i -p "Go:" < "$tmpfile"| awk '{print $(NF)}') || exit 1
+choice=$(dmenu -sb "#458588" -l 5 -i -p "Go:" < "$tmpfile"| awk '{print $(NF)}') || exit 1
 
 # Detect links without protocol (This is WIP)
 protocol='^(https?|ftps?|mailto|about|file):///?'

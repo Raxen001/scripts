@@ -1,6 +1,10 @@
 #Startup picom composter
 picom --experimental-backends --config ~/.config/picom.conf -b &
 
+# polkit
+lxpolkit &
+noisetorch -i &
+
 #start up dunst notification
 dunst &
 
