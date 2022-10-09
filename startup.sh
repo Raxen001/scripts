@@ -3,7 +3,6 @@ picom --experimental-backends --config ~/.config/picom.conf -b &
 
 # polkit
 lxpolkit &
-noisetorch -i &
 
 #start up dunst notification
 dunst &
@@ -23,6 +22,13 @@ xset r rate 190 40 &
 
 #touchpad
 bash /home/raxen/.local/configs/scripts/touchpad.sh &
+
+#hotspot
+# "hotspot" should be created in nm-connection-editor
+# sudo systemctl restart network-manager
+#nmcli con up hotspot &
+nm-applet &
+
 
 #-------------------------------------------------------------------------------------------------NEEDED-ENDED----------:
 

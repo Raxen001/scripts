@@ -1,4 +1,5 @@
-import os, sys
+import os
+
 path_playlist = '/home/raxen/Music/Playlist/'
 path_songs = '/home/raxen/Music/Playlist/'
 path_config = '/home/raxen/.config/cmus/playlists/'
@@ -10,4 +11,3 @@ for i  in playlists:
     with open(f'{path_config}{i}', 'w') as f:
         for j in songs:
             f.write(f"{path_songs}{i}/{j}\n")
-

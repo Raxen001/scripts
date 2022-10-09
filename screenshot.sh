@@ -24,7 +24,7 @@
 
 (dmenu -p   -i | (read sel;
 OUTDIR="$HOME/Pictures/Screenshot/"
-#OUTDIR="$HOME/STUDY/Project/puc/varun"
+#OUTDIR="$HOME/STUDY/Project/dsa/varma"
 MAIM=maim
 SCREENSHOT=$OUTDIR/$(date +%s).png
 case "${sel%.*}" in

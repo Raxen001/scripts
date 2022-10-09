@@ -22,11 +22,12 @@ then
     song=$(cmus-remote -Q | grep file | rev | cut -d'/' -f1 | rev | grep -o ".*\." | tr -d ".")
     file=$(cmus-remote -Q | head -n2 | tail -n1 | cut -d' ' -f2- )
 #---ncmpcpp--
+# ncmpcpp
 elif pgrep -x "mpd" >/dev/null
 then
     song=$(mpc -f %file% | head -n1 | rev | cut -d'/' -f1 | rev | grep -o ".*\." | tr -d ".")
     file=$HOME/Music/$(mpc -f %file% | head -n1)
 fi
 
-ffmpegthumbnailer -m -i "$file" -q 10 -s 0 -o "$img" 
-notify-send -i "$img" -a "music" "$song"
+
+printf "$song\n"
