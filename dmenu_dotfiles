@@ -1,8 +1,23 @@
 #!/bin/bash
+
+
+
+case "$XDG_SESSION_TYPE" in
+    x11) LAUNCHER='dmenu -i -l 5  -p "dotfiles:  "';;
+    wayland)  
+        if type "wofi" >/dev/null 2>&1; then LAUNCHER="wofi --show=dmenu"; 
+        elif type "bmenu" >/dev/null 2>&1; then LAUNCHER=bmenu; 
+        elif type "rofi" >/dev/null 2>&1; then LAUNCHER=rofi; 
+        fi
+     ;;
+esac
+
 declare -A dotfiles
 #[""]=""
 dotfiles+=(
 ["alacritty"]="$HOME/.config/alacritty/alacritty.yml"
+["hyprland"]="$HOME/.config/hypr/hyprland.conf"
+["hyprpaper"]="$HOME/.config/hypr/hyprpaper.conf"
 ["newsboat"]="$HOME/.config/newsboat/config"
 ["rss-url"]="$HOME/.config/newsboat/urls"
 ["mpv"]="$HOME/.config/mpv/mpv.conf"
@@ -10,6 +25,7 @@ dotfiles+=(
 ["nvim"]="$HOME/.config/nvim/configs.vim"
 ["norc"]="$HOME/.config/nvim/norc.vim"
 ["dunst"]="$HOME/.config/dunst/dunstrc"
+["mako"]="$HOME/.config/mako/config"
 ["elinks"]="$HOME/.config/elinks/elinks.conf"
 ["zathura"]="$HOME/.config/zathura/zathurarc"
 ["amfora"]="$HOME/.config/amfora/config.toml"
@@ -34,7 +50,7 @@ dotfiles+=(
 #echo ${dotfiles[*]}   ### get all values
 #echo ${!dotfiles[*]}  ### get all keys
 
-key=$(printf "%s\n" ${!dotfiles[*]} | sort  | dmenu -i -l 5 -p "dotfiles:  ")
+key=$(printf "%s\n" ${!dotfiles[*]} | sort  | ${LAUNCHER})
 if [ -n "$key" ]
 then
     file=${dotfiles["$key"]}

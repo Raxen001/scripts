@@ -1,5 +1,5 @@
 #Startup picom composter
-picom --experimental-backends --config ~/.config/picom.conf -b &
+picom --config ~/.config/picom.conf &
 
 # polkit
 lxpolkit &
@@ -18,7 +18,7 @@ nitrogen --restore &
 slstatus &
 
 # set keyboard repeat rate
-xset r rate 190 40 & 
+# xset r rate 190 40 & 
 
 #touchpad
 bash /home/raxen/.local/configs/scripts/touchpad.sh &
@@ -29,6 +29,8 @@ bash /home/raxen/.local/configs/scripts/touchpad.sh &
 #nmcli con up hotspot &
 nm-applet &
 
+# kde-connect
+kdeconnect-indicator &
 
 #-------------------------------------------------------------------------------------------------NEEDED-ENDED----------:
 
