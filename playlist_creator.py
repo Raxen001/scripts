@@ -6,7 +6,7 @@ path_config = '/home/raxen/.config/cmus/playlists/'
 
 os.chdir(path_playlist)
 playlists = os.listdir()
-for i  in playlists:
+for i in playlists:
     songs = os.listdir(f'{path_songs}{i}')
     with open(f'{path_config}{i}', 'w') as f:
         for j in songs:
